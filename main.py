@@ -70,8 +70,7 @@ def start_scp(update, context):
                         break
                     
                     else:
-                        print("Ningun curso tiene los argumentos deseados")
-                        break
+                        pass
                 except Exception as a:
                         print(a)
                     #print("No hay cursos sobre eso")
