@@ -59,7 +59,6 @@ def start_scp(update, context):
                             print("No hay cursos")
                             pass
                         else:
-                            print("Sacando foto\n")
                             pu = PyUnsplash(api_key="lPDPAJGmT_KIhQAKVaVytFajtrSVEBxvK1PYfiEKlDc")
                             photos = pu.photos(type_='random', count=1, featured=True, query=x)
                             [photo] = photos.entries
@@ -68,7 +67,6 @@ def start_scp(update, context):
                             context.bot.send_photo(chat_id=SCRP, photo=photo.link_download, parse_mode="HTML", caption=f"<b>\n{titulo}\n</b>" ,reply_markup=InlineKeyboardMarkup([[b1]]))
                             files(dato=titulo)
                         break
-                    
                     else:
                         pass
                 except Exception as a:
