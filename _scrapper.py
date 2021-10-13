@@ -35,7 +35,7 @@ def scrapp():
                     break
                 else:
                     pass
-        time.sleep(3)
+        time.sleep(18000)
         scrapp()
     except Exception as a:
         print(f"Hay un error: {a}")
