@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 
 #Constantes globales
 TOKEN = '2062575752:AAF4SYcb1bdmVqV5lN5qXSFlyYbIrOwTVIM'
+KEYS = ["Python", "PHP", "HTML", "CSS", "SQL", "Mysql", "JavaScript", "C#", "C++", "Bootstrap", "MongoDB", "Hacker", "Hacking", "Hackeo", "Linux", "web", "Web", "forense", "programación"]
 NOW = date.today()
 INF = "-1001563177371"
 SCRP = "-1001502720349"
@@ -35,7 +36,7 @@ def files(dato):
 def start_scp(update, context):
     def scrapp():
         print("\n------Scrapping Web Iniciado------\n")
-        KEYS = ["Python", "PHP", "HTML", "CSS", "PostgreSQL", "Mysql", "JavaScript", "C#", "C++", "SQL", "Bootstrap", "MongoDB", "Angular", "Hacker", "Hacking", "Hackeo", "Linux", "web", "Web", "React", "forense", ""]
+        print("1 )Solicitud get \n")
         r = requests.get("https://blog.facialix.com/cupones/")
         d = r.text
         s = BeautifulSoup(d, "html.parser")
@@ -49,27 +50,33 @@ def start_scp(update, context):
             b1 = InlineKeyboardButton(text="Entra al Curso", url=link)
             #Iterar llaves y hacer un chequeo
             for x in KEYS:
-                if x in titulo:
-                    FILE = open("cursos.txt", "r")
-                    r = FILE.read()
-                    FILE.close()
-                    if titulo in r:
-                        print("No hay cursos")
-                        pass
+                try:
+                    if x in titulo:
+                        FILE = open("cursos.txt", "r")
+                        r = FILE.read()
+                        FILE.close()
+                        if titulo in r:
+                            print("No hay cursos")
+                            pass
+                        else:
+                            print("Sacando foto\n")
+                            pu = PyUnsplash(api_key="lPDPAJGmT_KIhQAKVaVytFajtrSVEBxvK1PYfiEKlDc")
+                            photos = pu.photos(type_='random', count=1, featured=True, query=x)
+                            [photo] = photos.entries
+                            print(titulo)
+                            context.bot.send_photo(chat_id=INF, photo=photo.link_download, parse_mode="HTML", caption=f"<b>\n{titulo}\n</b>" ,reply_markup=InlineKeyboardMarkup([[b1]]))
+                            context.bot.send_photo(chat_id=SCRP, photo=photo.link_download, parse_mode="HTML", caption=f"<b>\n{titulo}\n</b>" ,reply_markup=InlineKeyboardMarkup([[b1]]))
+                            files(dato=titulo)
+                        break
+                    
                     else:
-                        pu = PyUnsplash(api_key="lPDPAJGmT_KIhQAKVaVytFajtrSVEBxvK1PYfiEKlDc")
-                        photos = pu.photos(type_='random', count=1, featured=True, query=x)
-                        [photo] = photos.entries
-                        foto = photo.link_download
-                        context.bot.send_photo(chat_id=INF, photo=foto, parse_mode="HTML", caption=f"<b>\n{titulo}\n</b>" ,reply_markup=InlineKeyboardMarkup([[b1]]))
-                        context.bot.send_photo(chat_id=SCRP, photo=foto, parse_mode="HTML", caption=f"<b>\n{titulo}\n</b>" ,reply_markup=InlineKeyboardMarkup([[b1]]))
-                        files(dato=titulo)
-                        print(titulo)
-                    break
-                else:
-                    pass
+                        print("Ningun curso tiene los argumentos deseados")
+                        break
+                except Exception as a:
+                        print(a)
                     #print("No hay cursos sobre eso")
         time.sleep(3600)
+        print("\n\nActualización de cursos...")
         scrapp()
     scrapp()
 
@@ -403,7 +410,6 @@ def unpush(update, context):
 
 #Lectura continua de mensajes txt
 def echo(update, context):
-    user_id = update.effective_user['id']   
     text = update.effective_message['text']
     chat_id = update.effective_chat['id']
     username = update.effective_user['username']
