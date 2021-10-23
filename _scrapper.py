@@ -1,49 +1,64 @@
 import requests
-from bs4 import BeautifulSoup
 import time
-from pyunsplash import PyUnsplash
+from bs4 import BeautifulSoup
    
 def files(dato):
+    
     F = open("cursos.txt", "a")
     F.write(f"{dato}\n")
     F.close()
 
 def scrapp():
-    try:
-        #Declaracion de llaves 
-        KEYS = ["Python", "PHP", "HTML", "CSS", "PostgreSQL", "Mysql", "JavaScript", "C#", "C++", "SQL", "Bootstrap", "MongoDB", "Angular", "Hacker", "Hacking", "Hackeo", "Linux"]
-        r = requests.get("https://blog.facialix.com/cupones/")
-        d = r.text
-        s = BeautifulSoup(d, "html.parser")
-        t = s.find_all("h2", "sek-pg-title")
-        im = s.find_all("figure", "sek-pg-thumbnail")
-        #Iterar los datos extraidos del scrapper
-        for y in t:
-            su = y.find_all("a")
-            titulo = su[0].text
-            link = su[0].attrs.get("href")
-            curso = f"\n{titulo}|{link}"
-            #Iterar llaves y hacer un chequeo
-            for x in KEYS:
-                if x in titulo:
-                    FILE = open("cursos.txt", "r")
-                    r = FILE.read()
-                    FILE.close()
-                    if titulo in r:
-                        pass
+    
+    while "a":
+    
+        try:
+        
+            #Declaracion de llaves 
+            KEYS =        ["Python", "PHP", "HTML", "CSS", "PostgreSQL", "Mysql", "JavaScript", "C#", "C++", "SQL", "Bootstrap", "MongoDB", "Angular", "Hacker", "Hacking", "Hackeo", "Linux", "Web", "web"]
+            r =           requests.get("https://blog.facialix.com/cupones/")
+            d =           r.text
+            s =           BeautifulSoup(d, "html.parser")
+            articulo =    s.find_all("article", "sek-has-thumb")
+            
+            #Iterar los datos extraidos del scrapper
+            for i in articulo:
+                
+                A = i.find_all("div", "sek-pg-content")
+                CON = A[0].find_all("a")[0]
+                FIG = i.find_all("img")[0]
+                imagen = FIG.attrs.get("data-sek-src")
+                enlace = CON.attrs.get("href")
+                titulo = CON.text
+                
+                for i in KEYS:
+                    
+                    if i in titulo:
+                        
+                        print(f"{titulo}|{enlace}|{imagen}\n\n")
+                        
                     else:
-                        pu = PyUnsplash(api_key="lPDPAJGmT_KIhQAKVaVytFajtrSVEBxvK1PYfiEKlDc")
-                        photos = pu.photos(type_='random', count=1, featured=True, query=x)
-                        [photo] = photos.entries
-                        #print(f"{curso}\n{foto}")
-                        #foto = photo.link_download
-                    break
-                else:
-                    pass
-        time.sleep(3600)
-        scrapp()
-    except Exception as a:
-        print(f"Hay un error: {a}")
+                        
+                        pass
+            
+        except Exception as a:
+        
+            print(f"Hay un error: {a}")
+            
+        time.sleep(7)
+        
 
-
+# def olas():
+    
+#     get = scrapp()
+    
+#     print(get)
+    
 scrapp()
+
+
+
+
+
+    
+    
